@@ -14,6 +14,11 @@ PYTHONPATH=src python benchmarks/benchmark.py
 - `recovery_seconds`
 - `recovered_artifacts`
 
+## Sample Run (Current Implementation)
+- `drive_sanitize_seconds=0.0013`
+- `recovery_seconds=0.0508`
+- `recovered_artifacts=200`
+
 ## Interpretation
 - Lower sanitization and recovery times indicate better throughput.
 - Recovered artifact count helps compare carving effectiveness across datasets.

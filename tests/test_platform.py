@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from yukti.audit import AuditLogger
+from yukti.dashboard import DashboardService
 from yukti.orchestrator import YuktiPlatform
 from yukti.reporting import ReportingService
 
@@ -87,6 +88,21 @@ class AuditLoggerTests(unittest.TestCase):
             lines[1] = json.dumps(entry)
             log_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
             self.assertFalse(logger.verify_chain())
+
+
+class DashboardTests(unittest.TestCase):
+    def test_dashboard_status(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            platform = YuktiPlatform(base / "workspace")
+            device = base / "device.img"
+            device.write_bytes(b"a" * 256)
+            platform.sanitize_drive(device, "clear", "tester")
+
+            dashboard = DashboardService(base / "workspace")
+            status = dashboard.status()
+            self.assertTrue(status["audit_chain_valid"])
+            self.assertGreaterEqual(status["report_count"], 1)
 
 
 if __name__ == "__main__":
